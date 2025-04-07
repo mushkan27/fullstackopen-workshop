@@ -1,6 +1,8 @@
 import Note from "./components/Note";
 import { useState, useEffect } from "react";
 import axios from "axios"
+// import getAll from "./services/notes"; //not valid when using `export default { getAll, create }
+import noteService from "./services/notes";
 
 // const App = (props) => {
 //   return (
@@ -70,7 +72,7 @@ import axios from "axios"
 // };
 
 
-//USE EFFECT, AXIOUS
+//USE EFFECT, AXIOS
 const App = (props) => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState("");
@@ -79,15 +81,24 @@ const App = (props) => {
   useEffect(()=>{
     console.log("hello world")
     //1. Getting data from the backend server
-    let myAxiosPromise = axios.get("http://localhost:3001/notes") 
-    
-    myAxiosPromise.then((myResult)=>{
-      // console.log(myResult)
-      // console.dir(myResult.data)
+    let myAxiosPromise = noteService.getAll();
+    myAxiosPromise.then((myData)=>{
+      // console.log("myResult:", myResult) //Promise result which is object
+      // console.dir("myResultdata", myResult.data)
+      myData.push({
+        id: 1000,
+        content: "this is fake",
+        important: true
+      })
+
       //2. Put the data into notes state
-      setNotes(myResult.data)
-    })
-    console.log(myAxiosPromise) //Promise Object
+      setNotes(myData)})
+    //   .catch((err)=>{
+    //     console.log("error occured")
+    //       console.dir(err)
+    // })
+    
+    console.log("inside useEffect get:", myAxiosPromise) //Promise Object
   }
     ,[])
   
@@ -95,12 +106,20 @@ const App = (props) => {
   
   const handleSubmit = (event) => {
     event.preventDefault(); //prevent page refresh
-    setNotes(notes.concat({
+    let myNote = {
       content: newNote, 
       id: notes.length + 1, 
-      important:Math.random()>0.5}))
+      important:Math.random()>0.5
+    }
+    //Create (axios.post)
+    let postPromise = noteService.create(myNote)
+    console.log("inside handleSubmit post:", postPromise)
+    postPromise.then((result)=>{
+      console.log("note created data return", result.data)
+      setNotes(notes.concat(result.data))
     setNewNote("")
-    console.log("form has been submitted")
+    
+    })
   
   }
   
@@ -111,6 +130,32 @@ const App = (props) => {
   const handleClick = () => {
     setShowAll(!showAll)
   }
+
+//Button that display and change notes.important in FrontEnd(state) and BackEnd(server)
+  const updateData =(id)=> {
+    //1. update the server
+    let currentNote = notes.find((note)=>{return note.id === id})
+    let updatedNote = {...currentNote, important: !currentNote.important}
+    let putPromise=noteService.update(id, updatedNote)
+    putPromise.then((result)=>{
+      console.dir(result)
+      let updatedNote = result.data
+      //2. update the state
+      setNotes(
+        notes.map((note)=>
+          note.id===updatedNote.id?updatedNote:note)
+      )
+    }).catch(err=>{
+      console.log("some error here")
+      console.dir(err)
+      if(err.response.status===404){
+        console.log("this means id doesnot exists in server");
+        alert(`This note "${currentNote.content}" doesnot exist`)
+        setNotes(notes.filter((note)=> note.id !== currentNote.id))
+      }else{console.log('this is some other error')}
+    })
+    
+  }
   
   return (
     <>
@@ -119,7 +164,7 @@ const App = (props) => {
   
     <ul>
       {notesToShow.map((value)=>{
-        return <Note key={value.id} note={value}/>
+        return <Note key={value.id} note={value} updateNote={()=>{updateData(value.id)}} />
       })}
   </ul>
   
