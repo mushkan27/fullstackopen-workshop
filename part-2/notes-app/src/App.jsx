@@ -1,8 +1,9 @@
 import Note from "./components/Note";
 import { useState, useEffect } from "react";
-import axios from "axios"
+// import axios from "axios"
 // import getAll from "./services/notes"; //not valid when using `export default { getAll, create }
 import noteService from "./services/notes";
+import Notification from "./components/Notification";
 
 // const App = (props) => {
 //   return (
@@ -77,6 +78,7 @@ const App = (props) => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(false)
+  const [notification, setNotification] = useState('')
   
   useEffect(()=>{
     console.log("hello world")
@@ -150,16 +152,27 @@ const App = (props) => {
       console.dir(err)
       if(err.response.status===404){
         console.log("this means id doesnot exists in server");
-        alert(`This note "${currentNote.content}" doesnot exist`)
+        // alert(`This note "${currentNote.content}" doesnot exist`)
+        setNotification(`This note "${currentNote.content}" doesnot exist`);
+        setTimeout(() => {
+          setNotification("")
+        }, 2000);
         setNotes(notes.filter((note)=> note.id !== currentNote.id))
       }else{console.log('this is some other error')}
     })
     
   }
   
+  //For inline styling
+  const myStyle = {
+    fontSize: "60px"
+  }
+
+
   return (
     <>
-    <h1>Notes</h1>
+    <h1 style={myStyle} className="redbackground">Notes</h1>
+    <Notification message={notification} />
     <button onClick={handleClick}>show {showAll?"important":"all"} </button>
   
     <ul>

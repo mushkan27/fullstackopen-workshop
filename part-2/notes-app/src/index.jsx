@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import "./index.css";
 
 let notes = [
     {id: 1, content: "note 1", important: true},
