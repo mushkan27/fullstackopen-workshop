@@ -3,8 +3,11 @@ console.log("Hello!")
 // const http = require('http')
 const express = require('express')
 const app = express()
+const cors = require('cors')
 
 app.use(express.json()); //This tells Express to automatically parse JSON in the body of POST requests and put it in request.body.
+app.use(cors())
+app.use(express.static('dist'))
 
 const requestLogger = (request, response, next) => {
   console.log("Method:", request.method);
@@ -39,9 +42,9 @@ let notes = [
 //   response.end(JSON.stringify(notes))
 // })
 
-app.get("/",(request, response) => {
-    response.send("<h1>Hello World</h1>")
-  })
+// app.get("/",(request, response) => {
+//     response.send("<h1>Hello World</h1>")
+//   })
 
 app.get("/api/notes",(request, response) => {
     response.json(notes)
@@ -77,6 +80,6 @@ app.use((request, response, next)=>{
 })
 
 
-const PORT = 3001
+const PORT = process.env.PORT ? process.env.PORT : 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
