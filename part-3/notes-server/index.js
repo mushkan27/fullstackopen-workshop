@@ -18,6 +18,7 @@ const requestLogger = (request, response, next) => {
 }
 app.use(requestLogger);
 
+
 let notes = [
     {
       id: 1,
