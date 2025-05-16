@@ -2,9 +2,11 @@ console.log("Hello!")
 
 // const http = require('http')
 const express = require('express')
+// console.log(typeof express) // function
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+// console.log(typeof mongoose) //'object'
 
 const url = `mongodb+srv://muskan:Scarlet%405843@cluster0.x3hvp1l.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
 
@@ -12,10 +14,12 @@ mongoose.set('strictQuery',false)
 
 mongoose.connect(url)
 
+//Schema is a class(constructor function) provided by mongoose that's why new keyword
 const noteSchema = new mongoose.Schema({
   content: String,
   important: Boolean,
 })
+// console.log(typeof noteSchema) //object
 
 noteSchema.set('toJSON', {
   transform: (document, returnedObject) => {
@@ -47,33 +51,30 @@ app.use(requestLogger);
 let notes = []
 
   
-// const app = http.createServer((request, response) => {
-//   response.writeHead(200, { 'Content-Type': 'text/json' })
-//   response.end(JSON.stringify(notes))
-// })
+/* const app = http.createServer((request, response) => {
+   response.writeHead(200, { 'Content-Type': 'text/json' })
+   response.end(JSON.stringify(notes))
+ })
 
-// app.get("/",(request, response) => {
-//     response.send("<h1>Hello World</h1>")
-//   })
-
-app.get("/api/notes",(request, response) => {
-  Note.find({}).then((result) => {
-    response.json(result)
+ app.get("/",(request, response) => {
+   response.send("<h1>Hello World</h1>")
   })
-})
 
-app.get("/api/notes/:id",(request, response)=>{
-  const myId = Number(request.params.id); //turns URL id into a Number //request.param always comes as string
-  const myNote = notes.find((note) => note.id === myId);
-  if(myNote){
-    response.json(myNote)
-  }else{
-    response.status(404).send(`There are no notes at ${myId}`)
-  }
-  
-})
+ app.get("/api/notes",(request, response) => {
+   response.json(notes)
+ })
 
-//to create a DELETE route that allows a user to delete a specific note by its id
+ app.get("/api/notes/:id",(request, response)=>{
+   const myId = Number(request.params.id); //turns URL id into a Number //request.param always comes as string
+   const myNote = notes.find((note) => note.id === myId);
+   if(myNote){
+     response.json(myNote)
+   }else{
+     response.status(404).send(`There are no notes at ${myId}`)
+   }
+  }) 
+
+  //to create a DELETE route that allows a user to delete a specific note by its id
 app.delete("/api/notes/:id",(request, response)=>{
   const myId = Number(request.params.id); 
   notes = notes.filter((note) => note.id !== myId);
@@ -95,13 +96,109 @@ app.post("/api/notes", (request, response)=>{
   //   console.log('note saved!')
   //   mongoose.connection.close()
   // })
-  
 })
+
+  app.put("api/notes/:id", (request, response)=>{
+    const myId = Number(request.params.id);
+    const updatedNote = request.body;
+    let noteFound = false;
+    notes= notes.map((note)=>{
+      if(note.id !== myId)return note;
+      else{
+      noteFound = true;
+    return updatedNote;
+      }
+      })
+
+      if(noteFound){
+      response.status(202).json(updatedNote)
+      }else{
+      response.status(404).send(`There are no notes at ${myId}`)
+      }
+    })
+   
+  */
+
+app.get("/api/notes",(request, response) => {
+  Note.find({}).then((result) => {
+    response.json(result)
+  })
+}) 
+
+app.get("/api/notes/:id",(request, response, next)=>{
+  Note.findById(request.params.id).then((result)=>{
+    if(result){
+      response.json(result)
+    }else{
+      response.status(404).send(`There are no notes at ${request.params.id}`)
+    }
+  })
+  .catch(e=>{
+    next(e)
+    // console.log(e)
+    // response.status(500).send(`${request.params.id} is not in the required format` )
+  })
+})
+
+app.put('/api/notes/:id', (request, response, next) => {
+  const { content, important } = request.body
+
+  Note.findById(request.params.id)
+    .then(note => {
+      if (!note) {
+        return response.status(404).end()
+      }
+
+      note.content = content
+      note.important = important
+
+      return note.save().then((updatedNote) => {
+        response.json(updatedNote)
+      })
+    })
+    .catch(error => next(error))
+})
+
+app.delete('/api/notes/:id', (request, response, next) => {
+  Note.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
+})
+
+app.post('/api/notes', (request, response) => {
+  const body = request.body
+
+  if (!body.content) {
+    return response.status(400).json({ error: 'content missing' })
+  }
+
+  const note = new Note({
+    content: body.content,
+    important: body.important || false,
+  })
+
+  note.save().then(savedNote => {
+    response.json(savedNote)
+  })
+})
+
+
 
 app.use((request, response, next)=>{
   response.status(404).send("no code available to handle this request")
 })
 
+const errorHandler = (error, request, response, next)=>{
+  console.log(error.message);
+
+  if(error.name === "CastError"){
+    return response.status(400).send({error: "malformatted id"})
+  }
+  next(error);
+}
+app.use(errorHandler)
 
 const PORT = process.env.PORT ? process.env.PORT : 3001
 app.listen(PORT)

@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 //process.argv is an array containing the command line arguments passed when the Node.js process was launched
 if (process.argv.length < 3) {
   console.log('give password as argument')
-  process.exit(1)
+  process.exit(1)  //program exited with an error
 }
 
 //password captures the second command line argument
@@ -22,6 +22,8 @@ const noteSchema = new mongoose.Schema({
 })
 
 const Note = mongoose.model('Note', noteSchema)
+// console.log(Note); //Model { Note }
+// console.log(typeof Note)  //function constructor
 
 const note = new Note({
   content: 'HTML is easy',
