@@ -1,20 +1,32 @@
-// eslint.config.js (CommonJS style)
-const js = require("@eslint/js");
-const globals = require("globals");
-const { defineConfig } = require("eslint/config");
+import globals from 'globals'
+import js from '@eslint/js'
+import stylisticJs from '@stylistic/eslint-plugin-js'
 
-module.exports = defineConfig([
+export default [
+  js.configs.recommended,
   {
-    files: ["**/*.{js,cjs,mjs}"],
+    files: ['**/*.js'],
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "commonjs",
-      globals: globals.node,
+      sourceType: 'commonjs',
+      globals: { ...globals.node },
+      ecmaVersion: 'latest',
     },
-    ...js.configs.recommended,
+    plugins: {
+      '@stylistic/js': stylisticJs,
+    },
     rules: {
-      "no-console": 0,
-      "eqeqeq": "error",
+      '@stylistic/js/indent': ['error', 2],
+      '@stylistic/js/linebreak-style': ['error', 'unix'],
+      '@stylistic/js/quotes': ['error', 'single'],
+      '@stylistic/js/semi': ['error', 'never'],
+      eqeqeq: 'error',
+      'no-trailing-spaces': 'error',
+      'object-curly-spacing': ['error', 'always'],
+      'arrow-spacing': ['error', { before: true, after: true }],
+      'no-console': 'off',
     },
   },
-]);
+  {
+    ignores: ['dist/**'],
+  },
+]

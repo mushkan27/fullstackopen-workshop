@@ -1,4 +1,4 @@
-console.log("Hello!")
+console.log('Hello!')
 
 // const http = require('http')
 const express = require('express')
@@ -8,7 +8,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 // console.log(typeof mongoose) //'object'
 
-const url = `mongodb+srv://muskan:Scarlet%405843@cluster0.x3hvp1l.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
+const url = process.env.MONGODB_URI
 
 mongoose.set('strictQuery',false)
 
@@ -38,23 +38,23 @@ const Note = mongoose.model('Note', noteSchema)
 
 
 
-app.use(express.json()); //This tells Express to automatically parse JSON in the body of POST requests and put it in request.body.
+app.use(express.json()) //This tells Express to automatically parse JSON in the body of POST requests and put it in request.body.
 app.use(cors())
 app.use(express.static('dist'))
 
 const requestLogger = (request, response, next) => {
-  console.log("Method:", request.method);
-  console.log("Path:", request.path);
-  console.log("Body:", request.body);
-  console.log("we just code this");
-  next();
+  console.log('Method:', request.method)
+  console.log('Path:', request.path)
+  console.log('Body:', request.body)
+  console.log('we just code this')
+  next()
 }
-app.use(requestLogger);
+app.use(requestLogger)
 
 
-let notes = []
+// let notes = []
 
-  
+
 /* const app = http.createServer((request, response) => {
    response.writeHead(200, { 'Content-Type': 'text/json' })
    response.end(JSON.stringify(notes))
@@ -76,11 +76,11 @@ let notes = []
    }else{
      response.status(404).send(`There are no notes at ${myId}`)
    }
-  }) 
+  })
 
   //to create a DELETE route that allows a user to delete a specific note by its id
 app.delete("/api/notes/:id",(request, response)=>{
-  const myId = Number(request.params.id); 
+  const myId = Number(request.params.id);
   notes = notes.filter((note) => note.id !== myId);
   response.status(204).send(`The note at id ${myId} has been deleted`)
 })
@@ -95,7 +95,7 @@ app.post("/api/notes", (request, response)=>{
   //   content: 'HTML is easy',
   //   important: true,
   // })
-  
+
   // note.save().then(result => {
   //   console.log('note saved!')
   //   mongoose.connection.close()
@@ -120,24 +120,23 @@ app.post("/api/notes", (request, response)=>{
       response.status(404).send(`There are no notes at ${myId}`)
       }
     })
-   
+
   */
 
-app.get("/api/notes",(request, response) => {
+app.get('/api/notes',(request, response) => {
   Note.find({}).then((result) => {
     response.json(result)
   })
-}) 
+})
 
-app.get("/api/notes/:id",(request, response, next)=>{
-  Note.findById(request.params.id).then((result)=>{
+app.get('/api/notes/:id',(request, response, next) => {
+  Note.findById(request.params.id).then((result) => {
     if(result){
       response.json(result)
     }else{
       response.status(404).send(`There are no notes at ${request.params.id}`)
     }
-  })
-  .catch(e=>{
+  }).catch(e => {
     next(e)
     // console.log(e)
     // response.status(500).send(`${request.params.id} is not in the required format` )
@@ -147,7 +146,7 @@ app.get("/api/notes/:id",(request, response, next)=>{
 app.put('/api/notes/:id', (request, response, next) => {
   const { content, important } = request.body
 
-  Note.findByIdAndUpdate(request.params.id, {content, important}, { new:true, runValidators:true })
+  Note.findByIdAndUpdate(request.params.id, { content, important }, { new:true, runValidators:true })
     .then(note => {
       if (!note) {
         return response.status(404).end()
@@ -165,13 +164,13 @@ app.put('/api/notes/:id', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
 })
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
   const body = request.body
 
   if (!body.content) {
@@ -185,26 +184,26 @@ app.post('/api/notes', (request, response) => {
 
   note.save().then(savedNote => {
     response.json(savedNote)
-  }).catch(e=>{
-    next(e);
+  }).catch(e => {
+    next(e)
   })
 })
 
 
 
-app.use((request, response, next)=>{
-  response.status(404).send("no code available to handle this request")
+app.use((request, response) => {
+  response.status(404).send('no code available to handle this request')
 })
 
-const errorHandler = (error, request, response, next)=>{
-  console.log(error.message);
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message)
 
-  if(error.name === "CastError"){
-    return response.status(400).send({error: "malformatted id"})
+  if(error.name === 'CastError'){
+    return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   }
-  next(error);
+  next(error)
 }
 app.use(errorHandler)
 
