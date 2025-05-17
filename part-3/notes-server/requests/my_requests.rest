@@ -11,3 +11,11 @@ content-type: application/json
     "content": "sample",
     "important": true
 }
+###
+PUT http://localhost:3001/api/notes/6824b1b248af5bdadc88f9d6
+content-type: application/json
+
+{
+    "content":"sam",
+    "important": false
+}
