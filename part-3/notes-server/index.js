@@ -16,7 +16,11 @@ mongoose.connect(url)
 
 //Schema is a class(constructor function) provided by mongoose that's why new keyword
 const noteSchema = new mongoose.Schema({
-  content: String,
+  content: {
+    type: String,
+    minLength: 5,
+    required: true
+  },
   important: Boolean,
 })
 // console.log(typeof noteSchema) //object
@@ -181,6 +185,8 @@ app.post('/api/notes', (request, response) => {
 
   note.save().then(savedNote => {
     response.json(savedNote)
+  }).catch(e=>{
+    next(e);
   })
 })
 
@@ -195,6 +201,8 @@ const errorHandler = (error, request, response, next)=>{
 
   if(error.name === "CastError"){
     return response.status(400).send({error: "malformatted id"})
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
   next(error);
 }
