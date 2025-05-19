@@ -74,14 +74,14 @@ import Notification from "./components/Notification";
 
 
 //USE EFFECT, AXIOS
-const App = (props) => {
+const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(false)
   const [notification, setNotification] = useState('')
-  
+
   useEffect(()=>{
-    console.log("hello world")
+    // console.log("hello world")
     //1. Getting data from the backend server
     let myAxiosPromise = noteService.getAll();
     myAxiosPromise.then((myData)=>{
@@ -100,11 +100,12 @@ const App = (props) => {
     //       console.dir(err)
     // })
     
-    console.log("inside useEffect get:", myAxiosPromise) //Promise Object
+    // console.log("inside useEffect get:", myAxiosPromise) //Promise Object
   }
     ,[])
   
   const notesToShow = notes.filter((note)=> showAll ? true : note.important)
+  console.log('notes to show', notesToShow)
   
   const handleSubmit = (event) => {
     event.preventDefault(); //prevent page refresh
@@ -119,6 +120,7 @@ const App = (props) => {
     postPromise.then((result)=>{
       console.log("note created data return", result.data)
       setNotes(notes.concat(result.data))
+      console.log("post note",notes)
     setNewNote("")
     
     })
