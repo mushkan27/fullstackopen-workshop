@@ -1,5 +1,5 @@
 console.log('Hello!')
-
+require('dotenv').config()
 // const http = require('http')
 const express = require('express')
 // console.log(typeof express) // function

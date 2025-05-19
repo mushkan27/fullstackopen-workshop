@@ -9,7 +9,7 @@ if (process.argv.length < 3) {
 //password captures the second command line argument
 const password = process.argv[2]
 
-const url = `mongodb+srv://muskan:${password}@cluster0.x3hvp1l.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
+const url = 'mongodb+srv://muskan:Scarlet%405843@cluster0.x3hvp1l.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0'
 
 mongoose.set('strictQuery',false)
 
@@ -30,7 +30,7 @@ const note = new Note({
   important: true,
 })
 
-note.save().then(result => {
+note.save().then(() => {
   console.log('note saved!')
   mongoose.connection.close()
 })
