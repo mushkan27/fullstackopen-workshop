@@ -1,12 +1,14 @@
+const { info } = require('./logger')
+
 const noCodeHandlers = (request, response) => {
   response.status(404).send('no code available to handle this request')
 }
 
 const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method)
-  console.log('Path:', request.path)
-  console.log('Body:', request.body)
-  console.log('we just code this')
+  info('Method:', request.method)
+  info('Path:', request.path)
+  info('Body:', request.body)
+  info('we just code this')
   next()
 }
 
