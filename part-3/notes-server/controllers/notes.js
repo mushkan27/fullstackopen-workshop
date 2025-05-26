@@ -2,11 +2,11 @@ const app = require('express').Router()
 const Note = require('../models/note')
 
 
-app.get('/',(request, response) => {
-  Note.find({}).then((result) => {
-    response.json(result)
-  })
+app.get('/', async(request, response) => {
+  let result = await Note.find({})
+  response.json(result)
 })
+
 
 // app.get('/api/notes/:id',(request, response, next) => {
 //   request.myObj={ name:'muskan' }
@@ -72,7 +72,7 @@ app.post('/', (request, response, next) => {
   })
 
   note.save().then(savedNote => {
-    response.json(savedNote)
+    response.status(201).json(savedNote)
   }).catch(e => {
     next(e)
   })
