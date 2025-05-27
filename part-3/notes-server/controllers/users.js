@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 
 
 app.get('/', async(request, response) => {
-  let result = await User.find({})
+  let result = await User.find({}).populate('notes', { content: 1, important: 1 })
   response.json(result)
 })
 
