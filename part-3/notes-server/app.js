@@ -11,6 +11,8 @@ const mongoose = require('mongoose')  // console.log(typeof mongoose) //'object'
 const config = require('./utils/config')
 const { errorHandler,noCodeHandlers,requestLogger } = require('./utils/middleware')
 const notesController = require('./controllers/notes')
+const usersController = require('./controllers/users')
+
 
 mongoose.set('strictQuery',false)
 
@@ -25,6 +27,7 @@ app.use(express.static('dist'))
 app.use(requestLogger)
 
 app.use('/api/notes', notesController)
+app.use('/api/users', usersController)
 
 app.use(noCodeHandlers)
 
