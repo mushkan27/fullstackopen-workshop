@@ -6,9 +6,10 @@ GET http://localhost:3001/api/notes/1
 ###
 POST http://localhost:3001/api/notes/
 content-type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im11c2thbjciLCJpZCI6IjY4MzVlNGJlY2I3YzdiZjRlOWFiYzQzYSIsImlhdCI6MTc0OTEyMDk4OX0.zzVMai3NKGHPriyyfRv83bVnU-l6cO0iVQ7A6dtYKOo
 
 {
-    "content": "sample by muskan",
+    "content": "notes creation using token",
     "important": true,
     "userId": "6835e4becb7c7bf4e9abc43a"
 }

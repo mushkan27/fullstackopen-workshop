@@ -2,14 +2,13 @@ const app = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 
-
+//fetch all users
 app.get('/', async(request, response) => {
   let result = await User.find({}).populate('notes', { content: 1, important: 1 })
   response.json(result)
 })
 
-
-
+//fetch a user by ID
 app.get('/:id',async(request, response, next) => {
   try {
     const user = await User.findById(request.params.id)
@@ -23,6 +22,7 @@ app.get('/:id',async(request, response, next) => {
   }
 })
 
+//create a new user
 app.post('/', async(request, response, next) => {
   const body = request.body
 
