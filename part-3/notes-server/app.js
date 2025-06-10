@@ -12,7 +12,7 @@ const config = require('./utils/config')
 const { errorHandler,noCodeHandlers,requestLogger } = require('./utils/middleware')
 const notesController = require('./controllers/notes')
 const usersController = require('./controllers/users')
-
+const loginController = require('./controllers/login')
 
 mongoose.set('strictQuery',false)
 
@@ -28,6 +28,7 @@ app.use(requestLogger)
 
 app.use('/api/notes', notesController)
 app.use('/api/users', usersController)
+app.use('/api/login', loginController)
 
 app.use(noCodeHandlers)
 
