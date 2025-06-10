@@ -8,8 +8,9 @@ POST http://localhost:3001/api/notes/
 content-type: application/json
 
 {
-    "content": "sample",
-    "important": true
+    "content": "sample by muskan",
+    "important": true,
+    "userId": "6835e4becb7c7bf4e9abc43a"
 }
 ###
 PUT http://localhost:3001/api/notes/6824b1b248af5bdadc88f9d6
@@ -18,4 +19,13 @@ content-type: application/json
 {
     "content":"sam",
     "important": false
+}
+###
+POST http://localhost:3001/api/users/
+content-type: application/json
+
+{
+    "username": "muskan7",
+    "name": "muskan lama",
+    "password": "password123"
 }

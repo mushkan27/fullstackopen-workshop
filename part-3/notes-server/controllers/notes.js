@@ -1,9 +1,10 @@
 const app = require('express').Router()
 const Note = require('../models/note')
+const User = require('../models/user')
 
 
 app.get('/', async(request, response) => {
-  let result = await Note.find({})
+  let result = await Note.find({}).populate('user', { username:1, name:1 })
   response.json(result)
 })
 
@@ -73,6 +74,7 @@ app.delete('/:id', async (request, response, next) => {
 
 app.post('/', async(request, response, next) => {
   const body = request.body
+  const user = await User.findById(body.userId)
 
   if (!body.content) {
     return response.status(400).json({ error: 'content missing' })
@@ -81,10 +83,13 @@ app.post('/', async(request, response, next) => {
   const note = new Note({
     content: body.content,
     important: body.important || false,
+    user: user.id
   })
   try{
     const savedNote = await note.save()
     response.status(201).json(savedNote)
+    user.notes = user.notes.concat(savedNote.id)
+    await user.save()
   }catch(e){
     next(e)
   }
