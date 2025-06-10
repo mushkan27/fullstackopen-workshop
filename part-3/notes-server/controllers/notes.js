@@ -2,32 +2,43 @@ const app = require('express').Router()
 const Note = require('../models/note')
 
 
-app.get('/',(request, response) => {
-  Note.find({}).then((result) => {
-    response.json(result)
-  })
+app.get('/', async(request, response) => {
+  let result = await Note.find({})
+  response.json(result)
 })
+
 
 // app.get('/api/notes/:id',(request, response, next) => {
 //   request.myObj={ name:'muskan' }
 //   next()
 // })
 
-app.get('/:id',(request, response, next) => {
+app.get('/:id',async(request, response, next) => {
 
-  Note.findById(request.params.id).then((result) => {
-    if(result){
-    // let result1 = { ...result,...request.myObj }
-    // console.log(result1)
-      response.json(result)
-    }else{
-      response.status(404).send(`There are no notes at ${request.params.id}`)
+  // Note.findById(request.params.id).then((result) => {
+  //   if(result){
+  //   // let result1 = { ...result,...request.myObj }
+  //   // console.log(result1)
+  //     response.json(result)
+  //   }else{
+  //     response.status(404).send(`There are no notes at ${request.params.id}`)
+  //   }
+  // }).catch(e => {
+  //   next(e)
+  //   // console.log(e)
+  //   // response.status(500).send(`${request.params.id} is not in the required format` )
+  // })
+
+  try {
+    const note = await Note.findById(request.params.id)
+    if (note) {
+      response.json(note)
+    } else {
+      response.status(404).end()
     }
-  }).catch(e => {
-    next(e)
-    // console.log(e)
-    // response.status(500).send(`${request.params.id} is not in the required format` )
-  })
+  } catch (exception) {
+    next(exception)
+  }
 })
 
 
@@ -51,15 +62,16 @@ app.put('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.delete('/:id', (request, response, next) => {
-  Note.findByIdAndDelete(request.params.id)
-    .then(() => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
+app.delete('/:id', async (request, response, next) => {
+  try {
+    await Note.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } catch (error) {
+    next(error)
+  }
 })
 
-app.post('/', (request, response, next) => {
+app.post('/', async(request, response, next) => {
   const body = request.body
 
   if (!body.content) {
@@ -70,12 +82,20 @@ app.post('/', (request, response, next) => {
     content: body.content,
     important: body.important || false,
   })
-
-  note.save().then(savedNote => {
-    response.json(savedNote)
-  }).catch(e => {
+  try{
+    const savedNote = await note.save()
+    response.status(201).json(savedNote)
+  }catch(e){
     next(e)
-  })
+  }
+
+
+  // note.save().then(savedNote => {
+  //   response.status(201).json(savedNote)
+  // })
+  // .catch(e => {
+  //   next(e)
+  // })
 })
 
 module.exports = app
