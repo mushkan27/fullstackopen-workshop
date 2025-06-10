@@ -4,73 +4,7 @@ import { useState, useEffect } from "react";
 // import getAll from "./services/notes"; //not valid when using `export default { getAll, create }
 import noteService from "./services/notes";
 import Notification from "./components/Notification";
-
-// const App = (props) => {
-//   return (
-//     <>
-//     <h1>Notes</h1>
-//     <ul>
-//       <li>{props.notes[0].content} </li>
-//       <li>{props.notes[1].content}</li>
-//         <li>{props.notes[2].content}</li>
-//   </ul>
-//   </>
-// );}
-
-//USING MAP METHOD
-// const App = (props) => {
-// const [notes, setNotes] = useState(props.notes)
-// const [newNote, setNewNote] = useState("");
-// const [showAll, setShowAll] = useState(false)
-
-// //to show important notes
-// const notesToShow = notes.filter((note)=> showAll ? true : note.important
-//   // {
-//   // return note.important
-// // }
-// )
-
-// const handleSubmit = (event) => {
-//   event.preventDefault(); //prevent page refresh
-//   setNotes(notes.concat({
-//     content: newNote, 
-//     id: notes.length + 1, 
-//     important:Math.random()>0.5}))
-//   setNewNote("")
-//   // debugger;
-//   console.log("form has been submitted")
-
-// }
-
-// const handleChange = (event) => {
-//   // console.log("typing")
-//   // console.log(event.target.value);
-//   setNewNote(event.target.value)
-// }
-
-// const handleClick = () => {
-//   setShowAll(!showAll)
-// }
-
-// return (
-//   <>
-//   <h1>Notes</h1>
-//   <button onClick={handleClick}>show {showAll?"important":"all"} </button>
-
-//   <ul>
-//     {notesToShow.map((value)=>{
-//       return <Note key={value.id} note={value}/>
-//     })}
-// </ul>
-
-// <form onSubmit={handleSubmit}>
-// {/* <input  value={newNote}  />  //controlled component: where the form elemenents like input, select are fully controlled by component's state rather than the DOM itself */}
-// <input  value={newNote} onChange={handleChange} />
-// <button type="submit">Submit</button>
-// </form>
-// </>
-// );
-// };
+import loginService from './services/login'
 
 
 //USE EFFECT, AXIOS
@@ -79,6 +13,9 @@ const App = () => {
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(false)
   const [notification, setNotification] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
 
   useEffect(()=>{
     // console.log("hello world")
@@ -170,11 +107,57 @@ const App = () => {
     fontSize: "60px"
   }
 
+   //For handling login 
+   const handleLogin = async(event) => {
+    event.preventDefault()
+    console.log('logging in with', username, password)
+    let loggedinUser = await loginService.login({
+      username,
+      password
+    })
+    console.log('logged in user', loggedinUser)
+    setUser(loggedinUser)
+  }
+
+  const loginForm = () => {
+    return (
+      <form onSubmit={handleLogin}>
+    <div>
+      username
+      <input type='text' value={username} name='username' onChange={({target}) => setUsername(target.value)} />
+    </div>
+
+    <div>
+    password
+    <input type="text" value={password} name='password' onChange={({target}) => setPassword(target.value)} />
+    </div>
+
+    <button type='submit'>Login</button>
+    </form>
+    )
+  }
+
+  const noteForm = () => {
+    return (
+      <form onSubmit={handleSubmit}>
+  <input  value={newNote} onChange={handleChange} />
+  <button type="submit">Submit</button>
+  </form>
+    )
+  }
+
+
 
   return (
     <>
     <h1 style={myStyle} className="redbackground">Notes</h1>
     <Notification message={notification} />
+
+    <h1>Login Form</h1>
+    {user === null?loginForm():noteForm()}
+
+    <br />
+    <h1>Notes</h1>
     <button onClick={handleClick}>show {showAll?"important":"all"} </button>
   
     <ul>
