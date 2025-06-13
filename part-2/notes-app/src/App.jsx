@@ -32,14 +32,14 @@ const App = () => {
 
       //2. Put the data into notes state
       setNotes(myData)})
-    //   .catch((err)=>{
-    //     console.log("error occured")
-    //       console.dir(err)
-    // })
-    
-    // console.log("inside useEffect get:", myAxiosPromise) //Promise Object
-  }
-    ,[])
+
+      //Get user from localStorage if available
+      let myUser = window.localStorage.getItem('noteUser')
+
+      if(myUser){
+        setUser(JSON.parse(myUser))
+      }
+  },[])
   
   const notesToShow = notes.filter((note)=> showAll ? true : note.important)
   console.log('notes to show', notesToShow)
@@ -52,14 +52,22 @@ const App = () => {
       important:Math.random()>0.5
     }
     //Create (axios.post)
-    let postPromise = noteService.create(myNote)
+    let postPromise = noteService.create(myNote, user.token)
     console.log("inside handleSubmit post:", postPromise)
     postPromise.then((result)=>{
       console.log("note created data return", result.data)
       setNotes(notes.concat(result.data))
       console.log("post note",notes)
     setNewNote("")
-    
+    }).catch(error => {
+      setNotification(error.response.data.error);
+        setTimeout(() => {
+          setNotification("")
+        }, 2000)
+        if(error.response.data.error === 'token expired'){
+          setUser(null)
+          window.localStorage.removeItem('noteUser')
+        }
     })
   
   }
@@ -111,12 +119,24 @@ const App = () => {
    const handleLogin = async(event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
-    let loggedinUser = await loginService.login({
-      username,
-      password
-    })
-    console.log('logged in user', loggedinUser)
-    setUser(loggedinUser)
+    try {
+      let loggedinUser = await loginService.login({
+        username,
+        password
+      })
+      console.log('logged in user', loggedinUser)
+      setUser(loggedinUser)
+      setUsername('')
+      setPassword('')
+      //For storing data in the browser's local storage which is a way to persist data even after the page is refreshed or the browser is closed and reopened.
+      window.localStorage.setItem('noteUser', JSON.stringify(loggedinUser))
+    } catch (error) {
+      setNotification(error.response.data.error);
+        setTimeout(() => {
+          setNotification("")
+        }, 2000)
+    }
+    
   }
 
   const loginForm = () => {

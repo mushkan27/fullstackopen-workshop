@@ -30,8 +30,8 @@ app.use('/api/notes', notesController)
 app.use('/api/users', usersController)
 app.use('/api/login', loginController)
 
-app.use(noCodeHandlers)
 
 app.use(errorHandler)
+app.use(noCodeHandlers)
 
 module.exports = app
