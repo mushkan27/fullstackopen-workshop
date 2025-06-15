@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import noteService from "./services/notes";
 import Notification from "./components/Notification";
 import loginService from './services/login'
+import Togglable from "./components/Togglable";
+import LoginForm from "./components/LoginForm";
 
 
 //USE EFFECT, AXIOS
@@ -141,19 +143,15 @@ const App = () => {
 
   const loginForm = () => {
     return (
-      <form onSubmit={handleLogin}>
-    <div>
-      username
-      <input type='text' value={username} name='username' onChange={({target}) => setUsername(target.value)} />
-    </div>
-
-    <div>
-    password
-    <input type="text" value={password} name='password' onChange={({target}) => setPassword(target.value)} />
-    </div>
-
-    <button type='submit'>Login</button>
-    </form>
+      <Togglable buttonLabel='login'>
+      <LoginForm
+        username={username}
+        password={password}
+        handleUsernameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        handleSubmit={handleLogin}
+      />
+    </Togglable>
     )
   }
 
