@@ -7,6 +7,7 @@ import Notification from "./components/Notification";
 import loginService from './services/login'
 import Togglable from "./components/Togglable";
 import LoginForm from "./components/LoginForm";
+import NoteForm from "./components/NoteForm";
 
 
 //USE EFFECT, AXIOS
@@ -157,10 +158,13 @@ const App = () => {
 
   const noteForm = () => {
     return (
-      <form onSubmit={handleSubmit}>
-  <input  value={newNote} onChange={handleChange} />
-  <button type="submit">Submit</button>
-  </form>
+      <Togglable buttonLabel="new note">
+  <NoteForm
+    onSubmit={handleSubmit}
+    value={newNote}
+    handleChange={handleChange}
+  />
+</Togglable>
     )
   }
 
@@ -171,7 +175,6 @@ const App = () => {
     <h1 style={myStyle} className="redbackground">Notes</h1>
     <Notification message={notification} />
 
-    <h1>Login Form</h1>
     {user === null?loginForm():noteForm()}
 
     <br />
@@ -184,10 +187,10 @@ const App = () => {
       })}
   </ul>
   
-  <form onSubmit={handleSubmit}>
+  {/* <form onSubmit={handleSubmit}>
   <input  value={newNote} onChange={handleChange} />
   <button type="submit">Submit</button>
-  </form>
+  </form> */}
   </>
   );
   };
