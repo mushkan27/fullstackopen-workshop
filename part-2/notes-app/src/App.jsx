@@ -1,7 +1,5 @@
 import Note from './components/Note'
 import { useState, useEffect, useRef } from 'react'
-// import axios from "axios"
-// import getAll from "./services/notes"; //not valid when using `export default { getAll, create }
 import noteService from './services/notes'
 import Notification from './components/Notification'
 import loginService from './services/login'
