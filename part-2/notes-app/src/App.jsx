@@ -16,7 +16,6 @@ const App = () => {
   const noteFormRef = useRef()
 
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(false)
   const [notification, setNotification] = useState('')
   const [username, setUsername] = useState('')
@@ -50,23 +49,16 @@ const App = () => {
   const notesToShow = notes.filter((note) => showAll ? true : note.important)
   console.log('notes to show', notesToShow)
 
-  const handleSubmit = (event) => {
-    event.preventDefault() //prevent page refresh
-    let myNote = {
-      content: newNote,
-      id: notes.length + 1,
-      important:Math.random()>0.5
-    }
+  const handleSubmit = (newNote) => {
 
     noteForm.current.toggleVisibility()
     //Create (axios.post)
-    let postPromise = noteService.create(myNote, user.token)
+    let postPromise = noteService.create(newNote, user.token)
     console.log('inside handleSubmit post:', postPromise)
     postPromise.then((result) => {
       console.log('note created data return', result.data)
       setNotes(notes.concat(result.data))
       console.log('post note',notes)
-      setNewNote('')
     }).catch(error => {
       setNotification(error.response.data.error)
       setTimeout(() => {
@@ -80,9 +72,6 @@ const App = () => {
 
   }
 
-  const handleChange = (event) => {
-    setNewNote(event.target.value)
-  }
 
   const handleClick = () => {
     setShowAll(!showAll)
@@ -166,8 +155,6 @@ const App = () => {
       <Togglable buttonLabel="new note" ref={noteFormRef}>
         <NoteForm
           onSubmit={handleSubmit}
-          value={newNote}
-          handleChange={handleChange}
         />
       </Togglable>
     )
