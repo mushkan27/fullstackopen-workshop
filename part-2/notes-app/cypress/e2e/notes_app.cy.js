@@ -15,4 +15,20 @@ describe('Note app', function() {
 
     cy.contains('Create a new note')
   })
+
+  describe('when logged in', function() {
+    beforeEach(function() {
+      cy.contains('login').click()
+      cy.get('#username').type('muskan7')
+      cy.get('#password').type('password123')
+      cy.get('#loginButton').click()
+    })
+
+    it('a new note can be created', function() {
+      // cy.contains('new note').click()
+      cy.get('#inputNote').type('a note created by cypress')
+      cy.contains('save').click()
+      cy.contains('a note created by cypress').should('be.visible')
+    })
+  })
 })

@@ -51,7 +51,7 @@ const App = () => {
 
   const handleSubmit = (newNote) => {
 
-    noteForm.current.toggleVisibility()
+    noteFormRef.current.toggleVisibility()
     //Create (axios.post)
     let postPromise = noteService.create(newNote, user.token)
     console.log('inside handleSubmit post:', postPromise)
