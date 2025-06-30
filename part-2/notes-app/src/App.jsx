@@ -160,6 +160,11 @@ const App = () => {
     )
   }
 
+  const handleLogout = () => {
+    setUser(null)
+    window.localStorage.removeItem('noteUser')
+  }
+
 
 
   return (
@@ -167,8 +172,17 @@ const App = () => {
       <h1 style={myStyle} className="redbackground">Notes</h1>
       <Notification message={notification} />
 
-      {user === null?loginForm():noteForm()}
-
+      {user === null 
+      ? loginForm() 
+      : (
+        <div>
+          <p>{user.name} logged in</p>
+          <button onClick={handleLogout}>Logout</button>
+          {noteForm()}
+        </div>
+      )
+    }
+    
       <br />
       <h1>Notes</h1>
       <button onClick={handleClick}>show {showAll?'important':'all'} </button>

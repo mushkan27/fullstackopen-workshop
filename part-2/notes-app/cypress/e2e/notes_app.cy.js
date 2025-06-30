@@ -40,10 +40,12 @@ describe('Note app', function() {
 
   describe('when logged in', function() {
     beforeEach(function() {
-      cy.contains('login').click()
-      cy.get('#username').type('mluukkai')
-      cy.get('#password').type('salainen')
-      cy.get('#loginButton').click()
+      cy.request('POST', 'http://localhost:3001/api/login', {
+        username: 'mluukkai', password: 'salainen'
+      }).then(response => {
+        localStorage.setItem('noteUser', JSON.stringify(response.body))
+        cy.visit('http://localhost:5173')
+      })
     })
 
     it('a new note can be created', function() {
