@@ -38,3 +38,5 @@ content-type: application/json
     "username": "muskan7",
     "password": "password123"
 }
+###
+POST http://localhost:3001/api/testing/reset

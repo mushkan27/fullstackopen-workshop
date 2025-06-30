@@ -4,6 +4,7 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 app.get('/', async(request, response) => {
+  console.log('in notes')
   let result = await Note.find({}).populate('user', { username:1, name:1 })
   response.json(result)
 })
