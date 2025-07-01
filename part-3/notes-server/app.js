@@ -1,6 +1,10 @@
 console.log('Hello!')
 require('dotenv').config()
 
+
+console.log(process.env.PORT)
+console.log(process.env.NODE_ENV)
+
 // const http = require('http')
 const express = require('express')   // console.log(typeof express) // function
 
@@ -17,19 +21,24 @@ const loginController = require('./controllers/login')
 mongoose.set('strictQuery',false)
 
 mongoose.connect(config.MONGODB_URI)
+app.use(cors())
 
 app.use(express.json()) //This tells Express to automatically parse JSON in the body of POST requests and put it in request.body.
-app.use(cors())
 app.use(express.static('dist'))
 
 
 
 app.use(requestLogger)
-
+console.log('in appjs')
 app.use('/api/notes', notesController)
 app.use('/api/users', usersController)
 app.use('/api/login', loginController)
 
+if (process.env.NODE_ENV === 'test') {
+  console.log('test')
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
 
 app.use(errorHandler)
 app.use(noCodeHandlers)

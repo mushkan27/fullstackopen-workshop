@@ -1,0 +1,8 @@
+//ensures correct JSX handling
+
+{
+    "compilerOptions": {
+      "jsx": "react-jsx"
+    }
+  }
+  
