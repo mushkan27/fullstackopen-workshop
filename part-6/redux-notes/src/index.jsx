@@ -1,7 +1,9 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createStore } from 'redux'
-import noteReducer, {createNote, toggleImportanceOf} from './reducers/noteReducer'
+import noteReducer from './reducers/noteReducer'
+import App from './App'
+import { Provider } from 'react-redux'
 
 
 const store = createStore(noteReducer)
@@ -14,48 +16,11 @@ store.dispatch({
   }
 })
 
-
-
-const App = () => {
-
-  const addNote = (e) => {
-    e.preventDefault()
-    console.dir(e.target.myInput.value)
-    const newNote = {
-      content: e.target.myInput.value,
-      important: true,
-      id: store.getState().length + 1
-    }
-    store.dispatch(createNote(newNote))
-    e.target.myInput.value = ''
-  }
-
-
-  const toggleImportant = (id) => {
-    store.dispatch(toggleImportanceOf(id))
-  }
-
-  return (
-    <div>
-      <form onSubmit={addNote}>
-        <input name="myInput" />
-        <button>Add note</button>
-      </form>
-    <ul>
-      {store.getState().map(note=>
-        <li key={note.id} onClick={()=>toggleImportant(note.id)}>
-          {note.content} <strong>{note.important ? 'important' : ''}</strong>
-        </li>
-      )}
-      </ul>
-  </div>
-  )
-}
-
 const container = document.getElementById('root')
 const root = createRoot(container)
 
-root.render(<App />)
-store.subscribe(() => {
-  root.render(<App />)
-})
+root.render(
+<Provider store={store}>
+<App />
+</Provider>
+)
