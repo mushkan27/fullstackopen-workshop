@@ -1,17 +1,8 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createStore } from 'redux'
+import noteReducer from './reducers/noteReducer'
 
-const noteReducer = (state=[], action) => {
-  console.log(action)
-  console.log(state)
-  if(action.type === 'NEW_NOTE'){
-    const newState = state.concat(action.payload)
-    return newState
-  }
-
-  return state
-}
 
 const store = createStore(noteReducer)
 store.dispatch({
