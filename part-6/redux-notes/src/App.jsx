@@ -1,13 +1,18 @@
 import NoteForm from "./components/NoteForm"
 import Notes from "./components/Notes"
-import { useState } from "react"
+import { useSelector,useDispatch } from "react-redux"
+import { filterChange } from "./reducers/filterReducer"
 
 const App = () => {
-  const [filter, setFilter] = useState('ALL')
+    const dispatch = useDispatch()
+    const filter = useSelector((state) => {
+      return state.filter
+    })
 
-  const filterSelected = (value) => {
-    setFilter(value)
-  }
+    const filterSelected = (value) => {
+      dispatch(filterChange(value))
+    }
+  
 
   return (
     <div>
@@ -26,7 +31,7 @@ const App = () => {
          <input type="radio" name="filter"
           onChange={() => filterSelected('NONIMPORTANT')} />
       </div>
-      <Notes filter={filter} />
+      <Notes  />
   </div>
   )
 }

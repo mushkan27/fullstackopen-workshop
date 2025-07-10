@@ -4,7 +4,7 @@ import { createNote } from "../reducers/noteReducer"
 const NoteForm = () => {
     const dispatch = useDispatch()
 
-    const notes = useSelector((state) => state)
+    const notes = useSelector((state) => state.notes)
 
     const addNote = (e) => {
         e.preventDefault()
