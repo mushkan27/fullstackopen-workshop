@@ -7,14 +7,14 @@ import { Provider } from 'react-redux'
 
 
 const store = createStore(noteReducer)
-store.dispatch({
-  type: 'NEW_NOTE',
-  payload: {
-    content: 'the app state is in redux store',
-    important: true,
-    id: 1
-  }
-})
+// store.dispatch({
+//   type: 'NEW_NOTE',
+//   payload: {
+//     content: 'the app state is in redux store',
+//     important: true,
+//     id: 1
+//   }
+// })
 
 const container = document.getElementById('root')
 const root = createRoot(container)
