@@ -15,7 +15,8 @@ const App = () => {
       <div>
         all         
          <input type="radio" name="filter"
-          onChange={() => filterSelected('ALL')} />
+          onChange={() => filterSelected('ALL')} 
+          checked={filter === 'ALL'}/>
 
         important   
          <input type="radio" name="filter"

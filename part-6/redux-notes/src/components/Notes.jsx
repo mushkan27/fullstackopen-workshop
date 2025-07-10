@@ -5,17 +5,17 @@ const Notes = ({ filter }) => {
     const dispatch = useDispatch()
     const notes = useSelector((state) => {
       if(filter === 'ALL'){
-        return state
+        return state.notes
       }
       else if(filter === 'IMPORTANT'){
-        return state.filter((note) => {
+        return state.notes.filter((note) => {
           if(note.important === true){
             return true
           }
         })
       }
       else if(filter === 'NONIMPORTANT'){
-        return state.filter((note) => {
+        return state.notes.filter((note) => {
           if(note.important === false){
             return true
           }
