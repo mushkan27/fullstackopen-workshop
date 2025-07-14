@@ -28,7 +28,7 @@ const Notes = () => {
 
 
     const toggleImportant = (id) => {
-    dispatch(toggleImportanceOf(id))
+    dispatch(toggleImportanceOf({id}))
   }
     return (
         <ul>

@@ -19,8 +19,7 @@ const noteReducer = createSlice({
   initialState,
   reducers: {
     createNote(state, action){
-      const newState = state.concat(action.payload)
-      return newState
+      return [...state, action.payload]
     },
     toggleImportanceOf(state, action){
       let myNote = state.find(note => note.id === action.payload.id)
