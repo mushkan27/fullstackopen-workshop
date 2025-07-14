@@ -1,16 +1,23 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { createStore, combineReducers } from 'redux'
+// import { createStore, combineReducers } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 import noteReducer from './reducers/noteReducer'
 import App from './App'
 import { Provider } from 'react-redux'
 import filterReducer from './reducers/filterReducer'
 
-const reducer = combineReducers({
-    notes: noteReducer,
-    filter: filterReducer
-})
-const store = createStore(reducer)
+// const reducer = combineReducers({
+//     notes: noteReducer,
+//     filter: filterReducer
+// })
+// const store = createStore(reducer)
+const store = configureStore({
+    reducer: {
+      notes: noteReducer,
+      filter: filterReducer
+    }
+  })
 // store.dispatch({
 //   type: 'NEW_NOTE',
 //   payload: {
