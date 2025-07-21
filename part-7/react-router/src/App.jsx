@@ -1,6 +1,5 @@
 import {
-  BrowserRouter as Router,
-  Routes, Route, Link, Navigate
+  Routes, Route, Link, Navigate, useMatch
 } from 'react-router-dom'
 import { useState } from 'react'
 import Notes from './Notes'
@@ -37,12 +36,15 @@ const App = () => {
 
   const [user, setUser] = useState(null)
 
+  const match = useMatch('/notes/:id')
+  const note = match ? notes.find(note => note.id == match.params.id) : null
+
   const padding = {
     padding: 5
   }
 
   return (
-    <Router>
+    <>
       <div>
         <Link style={padding} to="/">home</Link>
         <Link style={padding} to="/notes">notes</Link>
@@ -54,7 +56,7 @@ const App = () => {
       </div>
 
       <Routes>
-        <Route path="/notes/:id" element={<Note notes={notes} />} />
+        <Route path="/notes/:id" element={<Note note={note} />} />
         <Route path="/notes" element={<Notes notes={notes}/>} />
         <Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
         <Route path="/login" element={<Login setUser={setUser}/>}/>
@@ -64,7 +66,7 @@ const App = () => {
       <div>
         <i>Note app, Department of Computer Science 2024</i>
       </div>
-    </Router>
+    </>
   )
 }
 
