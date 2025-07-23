@@ -10,23 +10,17 @@ const FormApp = () => {
       <form>
         name: 
         <input
-          type={name.type}
-          value={name.value}
-          onChange={name.onChange} 
+          {...name}
         /> 
         <br/> 
         birthdate:
         <input
-          type={born.type}
-          value={born.value}
-          onChange={born.onChange}
+          {...born}
         />
         <br /> 
         height:
         <input
-          type={height.type}
-          value={height.value}
-          onChange={height.onChange}
+          {...height}
         />
       </form>
       <div>
