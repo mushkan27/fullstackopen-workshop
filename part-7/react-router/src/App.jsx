@@ -5,6 +5,7 @@ import { useState } from 'react'
 import Notes from './Notes'
 import Note from './Note'
 import Login from './Login'
+import { Navbar, Nav } from 'react-bootstrap'
 
 const notes = [
     {
@@ -44,15 +45,30 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className='container'>
       <div>
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+  <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+  <Navbar.Collapse id="responsive-navbar-nav">
+    <Nav className="me-auto">
+      <Nav.Link href="#" as="span">
         <Link style={padding} to="/">home</Link>
+      </Nav.Link>
+      <Nav.Link href="#" as="span">
         <Link style={padding} to="/notes">notes</Link>
+      </Nav.Link>
+      <Nav.Link href="#" as="span">
         <Link style={padding} to="/users">users</Link>
-         {user
-      ? <em>{user} logged in</em>
-      : <Link style={padding} to="/login">login</Link>
-    }
+      </Nav.Link>
+      <Nav.Link href="#" as="span">
+        {user
+          ? <em style={padding}>{user} logged in</em>
+          : <Link style={padding} to="/login">login</Link>
+        }
+      </Nav.Link>
+    </Nav>
+  </Navbar.Collapse>
+</Navbar>
       </div>
 
       <Routes>
@@ -66,7 +82,7 @@ const App = () => {
       <div>
         <i>Note app, Department of Computer Science 2024</i>
       </div>
-    </>
+    </div>
   )
 }
 
