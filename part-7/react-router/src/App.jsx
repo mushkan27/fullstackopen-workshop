@@ -6,24 +6,25 @@ import Notes from './Notes'
 import Note from './Note'
 import Login from './Login'
 import { Navbar, Nav } from 'react-bootstrap'
+import { Container, Alert, AppBar, Toolbar, IconButton, Button } from '@mui/material'
 
 const notes = [
-    {
-      "id": "1",
-      "content": "HTML is easy",
-      "important": true
-    },
-    {
-      "id": "2",
-      "content": "Browser can execute only JavaScript",
-      "important": true
-    },
-    {
-      "id": "3",
-      "content": "GET and POST are the most important methods of HTTP protocol",
-      "important": false
-    }
-  ]
+  {
+    "id": "1",
+    "content": "HTML is easy",
+    "important": true
+  },
+  {
+    "id": "2",
+    "content": "Browser can execute only JavaScript",
+    "important": true
+  },
+  {
+    "id": "3",
+    "content": "GET and POST are the most important methods of HTTP protocol",
+    "important": false
+  }
+]
 
 const Home = () => (
   <div> <h2>TKTL notes app</h2> </div>
@@ -45,44 +46,39 @@ const App = () => {
   }
 
   return (
-    <div className='container'>
-      <div>
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-  <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-  <Navbar.Collapse id="responsive-navbar-nav">
-    <Nav className="me-auto">
-      <Nav.Link href="#" as="span">
-        <Link style={padding} to="/">home</Link>
-      </Nav.Link>
-      <Nav.Link href="#" as="span">
-        <Link style={padding} to="/notes">notes</Link>
-      </Nav.Link>
-      <Nav.Link href="#" as="span">
-        <Link style={padding} to="/users">users</Link>
-      </Nav.Link>
-      <Nav.Link href="#" as="span">
-        {user
-          ? <em style={padding}>{user} logged in</em>
-          : <Link style={padding} to="/login">login</Link>
-        }
-      </Nav.Link>
-    </Nav>
-  </Navbar.Collapse>
-</Navbar>
-      </div>
+    <Container>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/">
+            home
+          </Button>
+          <Button color="inherit" component={Link} to="/notes">
+            notes
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            users
+          </Button>
+          {user
+            ? <em>{user} logged in</em>
+            : <Button color="inherit" component={Link} to="/login">
+              login
+            </Button>
+          }
+        </Toolbar>
+      </AppBar>
 
       <Routes>
         <Route path="/notes/:id" element={<Note note={note} />} />
-        <Route path="/notes" element={<Notes notes={notes}/>} />
+        <Route path="/notes" element={<Notes notes={notes} />} />
         <Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
-        <Route path="/login" element={<Login setUser={setUser}/>}/>
+        <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/" element={<Home />} />
       </Routes>
 
       <div>
         <i>Note app, Department of Computer Science 2024</i>
       </div>
-    </div>
+    </Container>
   )
 }
 
