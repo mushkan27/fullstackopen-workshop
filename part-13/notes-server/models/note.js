@@ -25,6 +25,6 @@ Note.init({
   modelName: 'note'
 })
 
-Note.sync()
+// Note.sync()
 
 module.exports =  Note 
