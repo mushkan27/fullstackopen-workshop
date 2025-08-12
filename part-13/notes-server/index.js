@@ -2,8 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const notesRouter = require('./controllers/notes')
-const { PORT } = require('./utils/config')
-const { connectToDatabase } = require('./utils/db')
+const { PORT } = require('./util/config')
+const { connectToDatabase } = require('./util/db')
 
 app.use(express.json())
 
