@@ -1,6 +1,7 @@
 const Note = require('./note')
 const User = require('./user')
 
+// relations 
 User.hasMany(Note)
 Note.belongsTo(User)
 

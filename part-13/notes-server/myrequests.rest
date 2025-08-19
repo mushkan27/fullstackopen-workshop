@@ -3,7 +3,7 @@ content-type: application/json
 authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOjEsImlhdCI6MTc1NDk4NzA3NH0.hvbneJDzyul7J3GXqvfk4TWaLyZ_qFxuFc2CEefbivA
 
 {
-    "content": "test note 2",
+    "content": "hello",
     "important": false
 }
 ###
@@ -29,3 +29,5 @@ content-type: application/json
     "username": "testuser",
     "password": "secret"
 }
+###
+DELETE http://localhost:3001/api/notes/6

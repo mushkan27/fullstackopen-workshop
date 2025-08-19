@@ -1,7 +1,8 @@
 const app = require('express').Router()
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../util/config')
-const { Note } = require('../models/index')
+const { Note, User } = require('../models/index')
+const { Op } = require('sequelize')
 
 const noteFinder = async (req, res, next) => {
   req.note = await Note.findByPk(req.params.id)
@@ -23,7 +24,28 @@ const tokenExtractor = (req, res, next) => {
 }
 
 app.get('/', async (req, res) => {
-const notes = await Note.findAll()
+  // console.log(req.query.important, "is query param important")
+  // console.log(req.query.class, "is query param class")
+  const where = {}
+  let important = {
+    [Op.in]: [true, false]
+  }
+  if ( req.query.important ) {
+    important = req.query.important === "true"
+  }
+  if (req.query.search) {
+    where.content = {
+      [Op.substring]: req.query.search
+    }
+  }
+const notes = await Note.findAll({
+    attributes: { exclude: ['userId'] },
+    include: {
+      model: User,
+      attributes: ['name', 'username']
+    },
+    where
+  })
   res.json(notes)
 })
 
