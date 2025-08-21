@@ -1,18 +1,19 @@
 POST http://localhost:3001/api/notes
 content-type: application/json
-authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOjEsImlhdCI6MTc1NDk4NzA3NH0.hvbneJDzyul7J3GXqvfk4TWaLyZ_qFxuFc2CEefbivA
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIgMSIsImlkIjoxLCJpYXQiOjE3NTU3MDYyMjh9.f9gDNHnS-sWr2vsqxwNDZp5gY540-6o0XS_oSSJnciU
 
 {
-    "content": "hello",
-    "important": false
+    "content": "",
+    "important": true
 }
 ###
 POST http://localhost:3001/api/users
 content-type: application/json
 
 {
-    "username": "testuser",
-    "name": "test user"
+    "username": "user 4",
+    "name": "test user",
+    "disabled": true
 }
 ###
 PUT http://localhost:3001/api/notes/2
@@ -26,7 +27,7 @@ POST http://localhost:3001/api/login
 content-type: application/json
 
 {
-    "username": "testuser",
+    "username": "user 4",
     "password": "secret"
 }
 ###
