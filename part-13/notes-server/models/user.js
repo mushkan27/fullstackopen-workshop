@@ -31,7 +31,24 @@ User.init({
   sequelize,
   underscored: true,
   timestamps: false,
-  modelName: 'user'
+  modelName: 'user',
+  defaultScope: {
+    where: {
+      disabled: false
+    }
+  },
+  scopes: {
+    admin: {
+      where: {
+        admin: true
+      }
+    },
+    disabled: {
+      where: {
+        disabled: true
+      }
+    }
+  }
 })
 
 // User.sync()
