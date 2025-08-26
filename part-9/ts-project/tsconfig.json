@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+     "types": [],
     "target": "ES2022",
     "strict": true,
     "noUnusedLocals": true,
@@ -10,5 +11,6 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "moduleResolution": "node"
-  }
+  },
+  
 }
