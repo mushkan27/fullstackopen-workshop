@@ -24,6 +24,10 @@
       "id": "c10b",
       "content": "another note",
       "important": true
+    },
+    {
+      "id": "8068",
+      "content": "TypeScript note"
     }
   ]
 }

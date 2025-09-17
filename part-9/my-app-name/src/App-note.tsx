@@ -1,4 +1,5 @@
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
+import axios from 'axios';
 
 interface Note {
     id: number;
@@ -7,11 +8,20 @@ interface Note {
 
 const App = () => {
   const [newNote, setNewNote] = useState('');
-  const [notes, setNotes] = useState<Note[]>([{id: 1, content: 'hello there'}]);
+  const [notes, setNotes] = useState<Note[]>([]);
+
+  useEffect(()=>{
+    axios.get<Note[]>("http://localhost:3001/notes").then((response)=>{
+        const data = response.data;
+        setNotes(data)
+    })
+  },[])
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
-    setNotes([...notes, {id: notes.length + 1, content: newNote}])
+    axios.post<Note>("http://localhost:3001/notes", {content: newNote}).then(
+        (result)=>setNotes([...notes,result.data])
+    )
     setNewNote('')
   }
 
