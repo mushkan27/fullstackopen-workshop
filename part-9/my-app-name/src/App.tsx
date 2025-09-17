@@ -1,33 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { CoursePart } from "./types";
 
-function App() {
-  const [count, setCount] = useState(0)
+/**
+ * Helper function for exhaustive type checking
+ */
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
+
+const App = () => {
+  const courseName = "Half Stack application development";
+  const courseParts: CoursePart[] = [
+    {
+      name: "Fundamentals",
+      exerciseCount: 10,
+      description: "This is an awesome course part",
+
+      kind: "basic"
+    },
+    {
+      name: "Using props to pass data",
+      exerciseCount: 7,
+      groupProjectCount: 3,
+
+      kind: "group"
+    },
+    {
+      name: "Basics of type Narrowing",
+      exerciseCount: 7,
+      description: "How to go from unknown to string",
+
+      kind: "basic"
+    },
+    {
+      name: "Deeper type usage",
+      exerciseCount: 14,
+      description: "Confusing description",
+      backgroundMaterial: "https://type-level-typescript.com/template-literal-types",
+
+      kind: "background"
+    },
+  ]
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <h2>{courseName}</h2>
+    {courseParts.map((val) => (
+      <div key={val.name}>
+        {val.name} {val.exerciseCount}
+        {val.kind === "basic" ? (<div>{val.description}</div>) : 
+        val.kind === 'group' ? (<div>{val.groupProjectCount}</div>) : 
+        val.kind === 'background' ? (<div>{val.backgroundMaterial}</div>) :
+        assertNever(val)}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    ))}
+    
     </>
   )
 }
